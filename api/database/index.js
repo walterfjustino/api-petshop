@@ -1,14 +1,14 @@
 const Sequelize = require('sequelize')
 const config = require('config')
 
-const instance = new Sequelize(
-    config.get('mysql.database'),        /*NOME DO DATABASE */
-    config.get('mysql.user'),            /*USER DO DATABASE */
-    config.get('mysql.password'),        /*PASSWORD DO DATABASE */
+const instancia = new Sequelize(
+    config.get('mariadb.database'),   /* INF. PREENCHIDAS CONFORME DEFAULT.JSON */
+    config.get('mariadb.user'),           
+    config.get('mariadb.password'),        
     {
-        host: config.get('127.0.0.1'),   /*IP DO SERVIDOR DO DATABASE */
-        dialect: 'mysql'
+        host: config.get('mariadb.host'),   /*IP DO SERVIDOR DO DATABASE */
+        dialect: 'mariadb'
     }
 )
 
-module.exports = instance
+module.exports = instancia
