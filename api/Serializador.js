@@ -52,11 +52,25 @@ class SerializadorFornecedor extends Serializador {
               'categoria'           
         ].concat(camposExtras || []) /*PASSA A VARIAVEL CAMPOSEXTRAS OU UMA LISTA VAZIA */
     }                            /*concat() ESTA JUNTANDO OS CAMPOS RESTANTES PARA VISUALIZAR NO MÉTODO GET,
-                                    QUE PASSA O ID COMO PARAMETRO AFIM DE RETORNAR TODOS OS DETALHES*/
+                                        QUE PASSA O ID COMO PARAMETRO AFIM DE RETORNAR TODOS OS DETALHES*/
+}
+
+class SerializadorErro extends Serializador {
+    constructor( contentType, camposExtras) {
+        super()
+        this.contentType = contentType
+        this.camposPublicos = [
+            'id', 
+            'mensagem'
+        ].concat(camposExtras || [])
+        this.tagSingular = 'erro'
+        this.tagPlural = 'erros'
+    }
 }
 
 module.exports = {
     Serializador: Serializador,
     SerializadorFornecedor: SerializadorFornecedor,
+    SerializadorErro: SerializadorErro,
     formatosAceitos: ['application/json']
 }
