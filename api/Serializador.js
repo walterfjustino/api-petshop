@@ -1,16 +1,40 @@
 const ValorNaoSuportado = require("./erros/ValorNaoSuportado")
+const jsontoxml = require('jsontoxml')
 
-/*TRANSFORMA OS DADOS RECEBIDOS EM JSON */
+
 class Serializador {
+
+    /*TRANSFORMA OS DADOS RECEBIDOS EM JSON */
     json (dados) {
         return JSON.stringify(dados)
     }
+    /*TRANSFORMA OS DADOS RECEBIDOS EM XML */
+    xml (dados) {
+        let tag = this.tagSingular
+
+        if (Array.isArray(dados)) {
+            tag = this.tagPlural
+            dados = dados.map((item) => {
+                return {
+                    [this.tagSingular]: item
+                }
+            })
+            
+        }
+        return jsontoxml({ [tag]: dados}) /*PARA CONVERTER EM XML É NECESSÁRIO UMA TAG, 
+                                           .TAG ONDE IRÁ AGRUPAR TODOS OS DADOS  */
+    }
+
 /*RECEBE OS DADOS, VERIFICA SE O CONTEUDO É JSON, RETORNA JSON, SE NÃO FOR JSON, RETORNA A EXCECÃO VALOR NÃO SUPORTADO */
     serializar (dados) {
+        dados = this.filtrar(dados)/*TRANSFORMA O OBJETO DADOS, JA EXECUTANDO A FUNÇÃO DE FILTRAR, RETORNANDO O DADO FILTRADO */
+
         if (this.contentType === 'application/json') {
-            return this.json(
-                   this.filtrar(dados)
-                   )
+            return this.json(dados)
+        }
+
+        if (this.contentType === 'application/xml'){
+            return this.xml(dados)
         }
         throw new ValorNaoSuportado(this.contentType)
     }
@@ -50,7 +74,9 @@ class SerializadorFornecedor extends Serializador {
             'id',
              'empresa',
               'categoria'           
-        ].concat(camposExtras || []) /*PASSA A VARIAVEL CAMPOSEXTRAS OU UMA LISTA VAZIA */
+        ].concat(camposExtras || [])/*PASSA A VARIAVEL CAMPOSEXTRAS OU UMA LISTA VAZIA */
+         this.tagSingular = 'fornecedor'
+         this.tagPlural = 'fornecedores'
     }                            /*concat() ESTA JUNTANDO OS CAMPOS RESTANTES PARA VISUALIZAR NO MÉTODO GET,
                                         QUE PASSA O ID COMO PARAMETRO AFIM DE RETORNAR TODOS OS DETALHES*/
 }
@@ -72,5 +98,5 @@ module.exports = {
     Serializador: Serializador,
     SerializadorFornecedor: SerializadorFornecedor,
     SerializadorErro: SerializadorErro,
-    formatosAceitos: ['application/json']
+    formatosAceitos: ['application/json', 'application/xml']
 }

@@ -1,6 +1,6 @@
 const Modelo = require('./ModeloTabelaFornecedor')
 const NaoEncontrado = require('../../erros/NaoEncontrado')
-
+                                /*TABELAFORNECEDOR.JS SERVE COMO UMA "PONTE" DE CONEXÃO ENTRE O CODIGO EO BANCO DE DADOS */
 module.exports = {
 
     listar () {
